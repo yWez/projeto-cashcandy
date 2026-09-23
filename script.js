@@ -9,28 +9,48 @@ const fields = {
   unitCost: document.getElementById("unitCost"),
   unitsDay: document.getElementById("unitsDay"),
   daysWeek: document.getElementById("daysWeek"),
+  salePriceValue: document.getElementById("salePriceValue"),
+  unitCostValue: document.getElementById("unitCostValue"),
+  unitsDayValue: document.getElementById("unitsDayValue"),
+  daysWeekValue: document.getElementById("daysWeekValue"),
   monthlyRevenue: document.getElementById("monthlyRevenue"),
   monthlyProfit: document.getElementById("monthlyProfit"),
   dailyProfit: document.getElementById("dailyProfit"),
   paybackUnits: document.getElementById("paybackUnits")
 };
 
-const money = new Intl.NumberFormat("pt-BR", {
+const money0 = new Intl.NumberFormat("pt-BR", {
   style: "currency",
   currency: "BRL",
   maximumFractionDigits: 0
 });
 
-function numberValue(input) {
-  const value = Number(input?.value || 0);
-  return Number.isFinite(value) ? Math.max(0, value) : 0;
+const money2 = new Intl.NumberFormat("pt-BR", {
+  style: "currency",
+  currency: "BRL",
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2
+});
+
+function numeric(input) {
+  const value = Number(input?.value ?? 0);
+  return Number.isFinite(value) ? value : 0;
+}
+
+function paintRange(input) {
+  if (!input) return;
+  const min = Number(input.min);
+  const max = Number(input.max);
+  const value = Number(input.value);
+  const progress = ((value - min) / (max - min)) * 100;
+  input.style.setProperty("--fill", progress + "%");
 }
 
 function updateCalculator() {
-  const price = numberValue(fields.salePrice);
-  const cost = numberValue(fields.unitCost);
-  const units = numberValue(fields.unitsDay);
-  const days = Math.min(7, numberValue(fields.daysWeek));
+  const price = numeric(fields.salePrice);
+  const cost = numeric(fields.unitCost);
+  const units = numeric(fields.unitsDay);
+  const days = numeric(fields.daysWeek);
   const weeksPerMonth = 4.3;
 
   const revenueDay = price * units;
@@ -39,19 +59,23 @@ function updateCalculator() {
   const monthlyRevenue = revenueDay * days * weeksPerMonth;
   const monthlyProfit = profitDay * days * weeksPerMonth;
 
-  fields.monthlyRevenue.textContent = money.format(monthlyRevenue);
-  fields.monthlyProfit.textContent = money.format(monthlyProfit);
-  fields.dailyProfit.textContent = money.format(profitDay);
+  fields.salePriceValue.textContent = money2.format(price);
+  fields.unitCostValue.textContent = money2.format(cost);
+  fields.unitsDayValue.textContent = String(units);
+  fields.daysWeekValue.textContent = String(days);
 
-  if (profitUnit > 0) {
-    fields.paybackUnits.textContent = Math.ceil(PRODUCT_PRICE / profitUnit);
-  } else {
-    fields.paybackUnits.textContent = "—";
-  }
+  fields.monthlyRevenue.textContent = money0.format(monthlyRevenue);
+  fields.monthlyProfit.textContent = money0.format(monthlyProfit);
+  fields.dailyProfit.textContent = money0.format(profitDay);
+  fields.paybackUnits.textContent = profitUnit > 0
+    ? String(Math.ceil(PRODUCT_PRICE / profitUnit))
+    : "—";
+
+  [fields.salePrice, fields.unitCost, fields.unitsDay, fields.daysWeek].forEach(paintRange);
 }
 
-Object.values(fields)
-  .filter((field) => field instanceof HTMLInputElement)
+[fields.salePrice, fields.unitCost, fields.unitsDay, fields.daysWeek]
+  .filter(Boolean)
   .forEach((field) => field.addEventListener("input", updateCalculator));
 
 updateCalculator();
@@ -66,6 +90,6 @@ document.querySelectorAll("[data-checkout]").forEach((link) => {
 
   link.addEventListener("click", (event) => {
     event.preventDefault();
-    alert("O checkout do Doce Renda ainda será conectado. Basta inserir o link oficial no arquivo script.js.");
+    alert("O checkout oficial ainda será conectado. Assim que o link de pagamento for inserido, este botão levará direto para a compra.");
   });
 });
