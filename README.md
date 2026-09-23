@@ -42,13 +42,20 @@ Todos os botões marcados para compra passarão a abrir esse endereço.
 
 ## Publicação
 
-O projeto possui um workflow de GitHub Pages em `.github/workflows/pages.yml`.
+Como o site é estático, a publicação mais simples é pelo próprio GitHub Pages usando a branch principal.
 
-Se o GitHub Pages ainda não estiver habilitado no repositório, abra:
+No repositório, abra:
 
-**Settings → Pages → Build and deployment → Source → GitHub Actions**
+**Settings → Pages → Build and deployment**
 
-Depois disso, cada push na branch `main` publicará a versão mais recente.
+Configure:
+- **Source:** Deploy from a branch
+- **Branch:** main
+- **Folder:** / (root)
+
+Clique em **Save**.
+
+Depois disso, o GitHub publicará automaticamente a versão mais recente da branch `main`.
 
 ## Observação sobre resultados
 
