@@ -5,22 +5,23 @@ Landing page de vendas do **Doce Renda**, produto digital da Dole.
 ## Oferta atual
 
 - **Doce Renda:** R$ 49,90
-- **Brigadeiros de Luxo:** R$ 19,90 como order bump
+- O order bump complementar é exibido somente no checkout e não aparece na landing page.
 
 ## Estrutura da página
 
 A página foi construída como uma landing page longa de conversão, com:
 
-- Hero com promessa e CTA
+- Hero com foto real dos doces da Dole
 - Identificação com o público
-- História do Marcelo e construção de autoridade
+- História do Marcelo com foto real da formação em confeitaria
+- Provas sociais com registros reais de dias de venda
 - Apresentação do conteúdo do produto
-- Calculadora interativa de faturamento e lucro estimado
-- Apresentação do order bump Brigadeiros de Luxo
+- Calculadora interativa com sliders para simular faturamento e lucro
 - Oferta principal
 - FAQ
 - CTA final
 - CTA fixo no mobile
+- Identidade visual com logo oficial da Dole
 
 ## Checkout
 
@@ -38,25 +39,18 @@ e substitua pelo link oficial do checkout:
 const CHECKOUT_URL = "https://seu-checkout-aqui.com";
 ```
 
-Todos os botões marcados para compra passarão a abrir esse endereço.
+Todos os botões de compra passarão a abrir esse endereço.
 
 ## Publicação
 
-Como o site é estático, a publicação mais simples é pelo próprio GitHub Pages usando a branch principal.
+O site é publicado pelo GitHub Pages diretamente da branch principal:
 
-No repositório, abra:
-
-**Settings → Pages → Build and deployment**
-
-Configure:
 - **Source:** Deploy from a branch
 - **Branch:** main
 - **Folder:** / (root)
 
-Clique em **Save**.
-
-Depois disso, o GitHub publicará automaticamente a versão mais recente da branch `main`.
+Cada atualização na `main` dispara uma nova publicação.
 
 ## Observação sobre resultados
 
-Os números apresentados na história do Marcelo representam resultados pessoais relatados por ele e não são garantia de faturamento. A calculadora é uma simulação educativa e os resultados reais dependem de custos, preço, demanda, região, frequência de venda e execução.
+Os números da história do Marcelo e os registros de vendas representam resultados pessoais reais e não são garantia de faturamento. A calculadora é uma simulação educativa. Resultados variam conforme execução, custos, preço, demanda, região, frequência de venda e outros fatores.
