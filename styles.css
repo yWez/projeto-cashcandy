@@ -322,48 +322,52 @@ h1 em,h2 em{font-weight:700;color:var(--caramel)}
 .result-note{display:block;color:rgba(255,255,255,.5);font-size:10px;line-height:1.5}
 .proof{padding-top:104px;padding-bottom:90px}
 .proof-grid{
+  max-width:940px;
+  margin:0 auto;
   display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:15px;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
 }
-.proof-card{
-  min-height:235px;
-  position:relative;
+.proof-shot{
+  margin:0;
   overflow:hidden;
-  padding:24px;
+  padding:12px;
   border-radius:25px;
-  background:
-    linear-gradient(145deg,rgba(255,255,255,.95),rgba(250,246,239,.88));
+  background:rgba(255,254,249,.82);
   border:1px solid rgba(62,38,28,.10);
   box-shadow:0 13px 35px rgba(62,34,21,.07);
 }
-.proof-card::before{
-  content:"";
-  position:absolute;
-  width:95px;height:95px;
-  border-radius:50%;
-  right:-28px;top:-30px;
-  background:rgba(237,181,83,.16);
+.proof-image{
+  height:275px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  border-radius:16px;
+  background:linear-gradient(145deg,#f8f5f0,#eee8df);
 }
-.proof-tag{
-  position:relative;
-  display:inline-block;
-  color:var(--caramel);
-  font-size:9px;
-  letter-spacing:.15em;
-  font-weight:900;
-  margin-bottom:36px;
-}
-.proof-card p{position:relative;margin:0 0 3px;font-size:15px;font-weight:700;color:#4e3c34}
-.proof-card strong{
-  position:relative;
+.proof-image img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
   display:block;
-  font-size:31px;
-  color:#151515;
-  letter-spacing:-.04em;
-  margin-bottom:25px;
 }
-.proof-card small{position:relative;color:#8a7b72;font-size:10px}
+.proof-shot figcaption{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px 5px 4px;
+}
+.proof-shot figcaption span{
+  color:var(--ink-soft);
+  font-size:11px;
+  font-weight:800;
+}
+.proof-shot figcaption strong{
+  color:var(--cocoa);
+  font-size:19px;
+  letter-spacing:-.03em;
+}
 .proof-summary{
   margin:22px auto 0;
   max-width:760px;
@@ -371,7 +375,7 @@ h1 em,h2 em{font-weight:700;color:var(--caramel)}
   grid-template-columns:1fr 1fr;
   border-radius:23px;
   overflow:hidden;
-  background:rgba(70,35,24,.90);
+  background:linear-gradient(135deg,rgba(70,35,24,.88),rgba(48,24,18,.82));
   color:#fff;
   box-shadow:0 15px 35px rgba(60,31,21,.12);
 }
@@ -682,7 +686,7 @@ footer .legal{max-width:760px;color:rgba(255,255,255,.42);font-size:9px}
   .stat-b{right:0;top:25px}
   .founder-copy blockquote{font-size:20px}
   .proof-grid{grid-template-columns:1fr}
-  .proof-card{min-height:205px}
+  .proof-image{height:230px}
   .proof-summary{grid-template-columns:1fr}
   .proof-summary div+div{border-left:0;border-top:1px solid rgba(255,255,255,.11)}
   .calculator{padding-top:76px;padding-bottom:76px}
