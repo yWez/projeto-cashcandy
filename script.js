@@ -1,8 +1,4 @@
-const CHECKOUT_URL = "";
-
-// Cole aqui o link oficial do checkout quando estiver pronto.
-// Exemplo:
-// const CHECKOUT_URL = "https://seu-checkout.com";
+const CHECKOUT_URL = "https://pay.kiwify.com.br/PmXs34p";
 
 document.querySelectorAll("[data-checkout]").forEach((link) => {
   if (CHECKOUT_URL) {
