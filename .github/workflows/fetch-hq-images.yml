@@ -1,0 +1,59 @@
+name: Fetch HQ site images
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/fetch-hq-images.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch original HQ images from Canva CDN
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          HERO_URL='https://media.canva.com/v2/image-resize/format:JPG/height:1600/quality:92/uri:ifs%3A%2F%2FM%2Fc97c2103-2944-455d-8aa6-da794741cb9c/watermark:F/width:1200?csig=AAAAAAAAAAAAAAAAAAAAAHzPwLb1iac8ADcwRRmhVS3FhnE_QaiIhzchrriL9L8M&exp=1790580878&osig=AAAAAAAAAAAAAAAAAAAAALjPQLx3zztWJsIPFZubaLo9N3yMLH13XIIX8Q1wsSeA&signer=media-rpc'
+          MARCELO_URL='https://media.canva.com/v2/image-resize/format:JPG/height:1448/quality:92/uri:ifs%3A%2F%2FM%2F4ef9879a-ebda-4195-b57b-90467e37ee0c/watermark:F/width:1086?csig=AAAAAAAAAAAAAAAAAAAAAKGw_1QOVfA3innVnD-cDxoUWwEFtSjgip3T8YFHO2i7&exp=1790577754&osig=AAAAAAAAAAAAAAAAAAAAAJwkWMQGZPOu9mYNwj4On4FfWCYi8IKn1gQ630AXQVfa&signer=media-rpc'
+
+          mkdir -p assets
+          curl -L --fail --retry 2 "$HERO_URL" -o assets/hero-original-hq.jpg
+          curl -L --fail --retry 2 "$MARCELO_URL" -o assets/marcelo-original-hq.jpg
+
+          echo "Hero bytes: $(wc -c < assets/hero-original-hq.jpg)"
+          echo "Marcelo bytes: $(wc -c < assets/marcelo-original-hq.jpg)"
+          file assets/hero-original-hq.jpg
+          file assets/marcelo-original-hq.jpg
+
+          test $(wc -c < assets/hero-original-hq.jpg) -gt 100000
+          test $(wc -c < assets/marcelo-original-hq.jpg) -gt 50000
+
+      - name: Point site to HQ images
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          import re
+          s=re.sub(r'assets/hero[^"\']*', 'assets/hero-original-hq.jpg?v=17', s)
+          s=re.sub(r'assets/marcelo[^"\']*', 'assets/marcelo-original-hq.jpg?v=17', s)
+          p.write_text(s)
+          PY
+
+      - name: Commit HQ images
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/hero-original-hq.jpg assets/marcelo-original-hq.jpg index.html
+          git commit -m "fix: use original high-resolution site photos"
+          git push
