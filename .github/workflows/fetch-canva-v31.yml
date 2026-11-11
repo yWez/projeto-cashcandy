@@ -1,0 +1,45 @@
+name: Fetch HQ Dole vitrine
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/fetch-canva-v31.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download HQ source
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL='https://media.canva.com/v2/image-resize/format:PNG/height:1600/quality:92/uri:ifs%3A%2F%2FM%2F48bafece-32fe-49f1-bbed-ecfbfff77571/watermark:F/width:1200?csig=AAAAAAAAAAAAAAAAAAAAAAdu4vW6zCOge-B3SjOCrU69ragLo5aX9vm2GK9X6nZy&exp=1794452898&osig=AAAAAAAAAAAAAAAAAAAAAANXFVAZSpIzh9FnwsQU3ubvD9oKyPask-wthcGdsP1f&signer=media-rpc&token=AAIAAU0AJDQ4YmFmZWNlLTMyZmUtNDlmMS1iYmVkLWVjZmJmZmY3NzU3MQAAAAABoc26QNDvW_CtsxU6iVOTm7ERDQ90MUdjiO0P-JuOq83fdTaPVw'
+          curl -L --fail --retry 2 "$URL" -o /tmp/dole-vitrine.png
+          file /tmp/dole-vitrine.png
+          BYTES=$(wc -c < /tmp/dole-vitrine.png)
+          echo "bytes=$BYTES"
+          test "$BYTES" -gt 100000
+          python3 - <<'PY'
+          from PIL import Image
+          im=Image.open('/tmp/dole-vitrine.png').convert('RGB')
+          im.thumbnail((1100,1500), Image.Resampling.LANCZOS)
+          im.save('assets/dole-vitrine-v31.webp','WEBP',quality=82,method=6)
+          print(im.size)
+          PY
+          test $(wc -c < assets/dole-vitrine-v31.webp) -gt 70000
+
+      - name: Commit HQ image
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/dole-vitrine-v31.webp
+          git commit -m "fix: publish HQ Dole vitrine photo"
+          git push
